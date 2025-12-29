@@ -1,0 +1,8 @@
+streamlit
+pandas
+numpy
+altair
+pydeck
+scikit-learn
+python-dateutil
+requests
