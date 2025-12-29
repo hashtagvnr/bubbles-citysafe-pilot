@@ -1,0 +1,36 @@
+name: Weekly Crime Data Update
+
+on:
+  schedule:
+    # Run at 08:00 every Monday
+    - cron: '0 8 * * 1'
+  workflow_dispatch: # Allows manual button click
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Run Data Hunter
+        run: python main.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "BubblesBot"
+          git config --global user.email "bot@bubbles.com"
+          git add gloucester_crime_data.csv
+          git commit -m "Auto-update crime data" || echo "No changes to commit"
+          git push
